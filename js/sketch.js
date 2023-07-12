@@ -8,6 +8,12 @@ function setup() {
   gotFaces = function (results) {
     face_results = results;
     adjustCanvas();
+
+    hr = results;
+    if (hr) {
+      console.log(hr);
+      console.log(hr.faceLandmarks);
+    }
   };
 }
 
@@ -20,10 +26,37 @@ function draw() {
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
   if (face_results) {
     for (let landmarks of face_results.faceLandmarks) {
-      for (let landmark of landmarks) {
-        fill(255);
+      for (let i = 0; i < landmarks.length; i++) {
+        const landmark = landmarks[i];
+        const { x, y } = landmark;
+
+        // 目の周りの点を黒で描画
+        if (i >= 68 && i <= 187) {
+          fill(0);
+        }
+        //眉毛の点を茶色で描画
+        else if (i >= 198 && i <= 393) {
+          fill(230, 200, 200);
+        }
+        // 鼻の周りの点をオレンジで描画
+        else if (i >= 188 && i <= 197) {
+          fill(255, 165, 0);
+        }
+        // 口の周りの点を赤で描画
+        else if (i >= 398 && i <= 467) {
+          fill(255, 0, 0);
+        }
+        // その他の点を白で描画
+        else {
+          fill(255);
+        }
+
         noStroke();
-        circle(landmark.x * width, landmark.y * height, 2);
+        circle(x * width, y * height, 10);
+        // 番号を表示
+        fill(50);
+        textAlign(CENTER, CENTER);
+        text(i, x * width, y * height);
       }
     }
   }

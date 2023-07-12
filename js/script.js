@@ -90,6 +90,13 @@ async function predictWebcam() {
   if (lastVideoTime !== video.currentTime) {
     lastVideoTime = video.currentTime;
     results = faceLandmarker.detectForVideo(video, startTimeMs);
+
+    // ミラーリング変換
+    for (let landmarks of results.faceLandmarks) {
+      for (let landmark of landmarks) {
+        landmark.x = 1.0 - landmark.x;
+      }
+    }
   }
   gotFaces(results);
   // canvasCtx.save();
@@ -109,3 +116,5 @@ async function predictWebcam() {
     window.requestAnimationFrame(predictWebcam);
   }
 }
+const blendShapesList = document.getElementById("blendShapesList");
+drawBlendShapes(blendShapesList, results.faceBlendshapes);

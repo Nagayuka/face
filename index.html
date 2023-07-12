@@ -4,6 +4,16 @@
 <head>
   <meta charset="UTF-8">
   <title>p5MediaPipeHands Face Landmarker</title>
+  <style>
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    video {
+      -webkit-transform: scaleX(-1);
+    }
+  </style>
 </head>
 
 <body>
@@ -12,22 +22,25 @@
   <body>
     <h1>Face Landmarker</h1>
     <p id="message"></p>
-
-
+  
     <button id="webcamButton" disabled>
       ENABLE WEBCAM
     </button>
+    
     <div style="position: relative;">
       <video id="webcam" style="position:absolute;left:0px;top:0px;width:100%;height:auto" autoplay playsinline></video>
-      <div id="canvas" style="position:absolute;left:0px;top:0px">
-      </div>
+      <div id="canvas" style="position:absolute;left:0px;top:0px"></div>
     </div>
-
+  
+    <div class="blend-shapes">
+      <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
+    </div>
+  
     <!-- include js libraries -->
     <script src="./js/p5.js"></script>
     <script src="./js/sketch.js"></script>
     <script type="module" src="./js/script.js"></script>
-
   </body>
+  
 
 </html>
