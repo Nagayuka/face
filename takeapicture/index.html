@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>カメラアプリ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="mt-4 mb-4">カメラアプリ</h1>
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <video id="video" width="100%" height="auto" autoplay></video>
+          <br />
+          <button id="captureButton" class="btn btn-primary mt-2">
+            写真を撮影
+          </button>
+        </div>
+        <div class="col-12 col-md-6">
+          <canvas
+            id="canvas"
+            style="max-width: 100%; max-height: 400px"
+          ></canvas>
+          <br />
+          <a
+            id="downloadLink"
+            class="btn btn-success mt-2"
+            download="photo.jpg"
+            href="#"
+            >写真を保存</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // カメラストリームを取得する
+      navigator.mediaDevices
+        .getUserMedia({ video: true })
+        .then(function (stream) {
+          var videoElement = document.getElementById("video");
+          videoElement.srcObject = stream;
+
+          // カメラの解像度を取得して、Canvasのサイズを設定する
+          var track = stream.getVideoTracks()[0];
+          var settings = track.getSettings();
+          var canvasElement = document.getElementById("canvas");
+          canvasElement.width = settings.width;
+          canvasElement.height = settings.height;
+        })
+        .catch(function (error) {
+          console.error("カメラストリームを取得できませんでした: ", error);
+        });
+
+      // 写真を撮影する
+      var captureButton = document.getElementById("captureButton");
+      captureButton.addEventListener("click", function () {
+        var videoElement = document.getElementById("video");
+        var canvasElement = document.getElementById("canvas");
+        var downloadLink = document.getElementById("downloadLink");
+
+        // Canvasに映像を描画
+        canvasElement
+          .getContext("2d")
+          .drawImage(
+            videoElement,
+            0,
+            0,
+            canvasElement.width,
+            canvasElement.height
+          );
+
+        // 画像をDataURLに変換してダウンロードリンクに設定
+        var dataURL = canvasElement.toDataURL("image/jpeg");
+        downloadLink.href = dataURL;
+
+        // ダウンロードリンクを表示
+        downloadLink.style.display = "block";
+      });
+    </script>
+  </body>
+</html>
