@@ -1,7 +1,7 @@
 let face_results;
 
 function setup() {
-  let p5canvas = createCanvas(400, 800);
+  let p5canvas = createCanvas((windowHeight / 16) * 9, windowHeight);
   p5canvas.parent("#canvas");
 
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
@@ -16,6 +16,8 @@ function setup() {
     }
   };
 }
+
+let gameHeight = 400;
 
 function draw() {
   // 描画処理
@@ -37,9 +39,7 @@ function windowResized() {
 }
 
 function adjustCanvas() {
-  // Get an element by its ID
-  var element_webcam = document.getElementById("webcam");
-  resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight);
+  resizeCanvas((windowHeight / 16) * 9, windowHeight);
 }
 
 function Mask() {
