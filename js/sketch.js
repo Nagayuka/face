@@ -1,10 +1,10 @@
 let face_results;
 
 function setup() {
-  let p5canvas = createCanvas(400, 400);
+  let p5canvas = createCanvas(400, 800);
   p5canvas.parent("#canvas");
 
-  // お手々が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
+  // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
   gotFaces = function (results) {
     face_results = results;
     adjustCanvas();
@@ -20,7 +20,29 @@ function setup() {
 function draw() {
   // 描画処理
   clear(); // これを入れないと下レイヤーにあるビデオが見えなくなる
+  // マスクを描画
+  Mask();
 
+  // キャンバスに枠をつける
+  noFill();
+  stroke(0);
+  strokeWeight(2);
+  rect(0, 0, width, height);
+  //fill(230, 240, 255);
+  rect(0, 0, width, gameHeight);
+}
+
+function windowResized() {
+  adjustCanvas();
+}
+
+function adjustCanvas() {
+  // Get an element by its ID
+  var element_webcam = document.getElementById("webcam");
+  resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight);
+}
+
+function Mask() {
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
   // https://developers.google.com/mediapipe/solutions/vision/pose_landmarker
@@ -52,23 +74,12 @@ function draw() {
         }
 
         noStroke();
-        circle(x * width, y * height, 10);
+        circle(x * width, y * (height / 2), 10);
         // 番号を表示
         fill(50);
         textAlign(CENTER, CENTER);
-        text(i, x * width, y * height);
+        text(i, x * width, y * (height / 2));
       }
     }
   }
-}
-
-function windowResized() {
-  adjustCanvas();
-}
-
-function adjustCanvas() {
-  // Get an element by its ID
-  var element_webcam = document.getElementById("webcam");
-  resizeCanvas(element_webcam.clientWidth, element_webcam.clientHeight);
-  //console.log(element_webcam.clientWidth);
 }

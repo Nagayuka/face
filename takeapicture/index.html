@@ -30,8 +30,14 @@
             class="btn btn-success mt-2"
             download="photo.jpg"
             href="#"
+            style="display: none"
             >写真を保存</a
           >
+          <br />
+          <input type="file" id="loadFileInput" class="mt-2" />
+          <button id="loadButton" class="btn btn-info mt-2">
+            写真を読み込む
+          </button>
         </div>
       </div>
     </div>
@@ -79,6 +85,37 @@
 
         // ダウンロードリンクを表示
         downloadLink.style.display = "block";
+      });
+
+      // 写真を読み込む
+      var loadButton = document.getElementById("loadButton");
+      loadButton.addEventListener("click", function () {
+        var loadFileInput = document.getElementById("loadFileInput");
+        if (loadFileInput.files && loadFileInput.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var img = new Image();
+            img.onload = function () {
+              var canvasElement = document.getElementById("canvas");
+              var context = canvasElement.getContext("2d");
+              context.clearRect(
+                0,
+                0,
+                canvasElement.width,
+                canvasElement.height
+              );
+              context.drawImage(
+                img,
+                0,
+                0,
+                canvasElement.width,
+                canvasElement.height
+              );
+            };
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(loadFileInput.files[0]);
+        }
       });
     </script>
   </body>

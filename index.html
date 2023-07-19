@@ -1,52 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>p5MediaPipeHands Face Landmarker</title>
+    <style>
+      .container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-<head>
-  <meta charset="UTF-8">
-  <title>p5MediaPipeHands Face Landmarker</title>
-  <style>
-    .container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-    }
+      video {
+        -webkit-transform: scaleX(-1);
+      }
 
-    video {
-      -webkit-transform: scaleX(-1);
-    }
-  </style>
-</head>
+      #canvas {
+        width: 100%;
+        height: 100%;
+      }
 
-<body>
-
+      #webcam {
+        width: 100%;
+        height: 50%;
+      }
+    </style>
+  </head>
 
   <body>
     <h1>Face Landmarker</h1>
-    <div>
-      <a href="takeapicture/index.html">カメラアプリ</a>
-      
-    </div>
-  
     <p id="message"></p>
-  
-    <button id="webcamButton" disabled>
-      ENABLE WEBCAM
-    </button>
-    
-    <div style="position: relative;">
-      <video id="webcam" style="position:absolute;left:0px;top:0px;width:100%;height:auto" autoplay playsinline></video>
-      <div id="canvas" style="position:absolute;left:0px;top:0px"></div>
+    <div class="container">
+      <div>
+        <button id="webcamButton" disabled>ENABLE WEBCAM</button>
+      </div>
+      <div style="position: relative">
+        <video
+          id="webcam"
+          style="position: absolute; left: 0px; top: 0px"
+          autoplay
+          playsinline
+        ></video>
+        <div id="canvas" style="position: absolute; left: 0px; top: 50%"></div>
+      </div>
     </div>
-  
-    <!-- <div class="blend-shapes">
-      <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
-    </div> -->
-
 
     <!-- include js libraries -->
     <script src="./js/p5.js"></script>
     <script src="./js/sketch.js"></script>
     <script type="module" src="./js/script.js"></script>
-  </body>
-  
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const previewContainer = document.getElementById("previewContainer");
 
+      fileInput.addEventListener("change", function () {
+        const file = fileInput.files[0];
+        const fileURL = URL.createObjectURL(file);
+        const previewImage = document.createElement("img");
+        previewImage.src = fileURL;
+        previewImage.style.maxWidth = "100%";
+        previewImage.style.maxHeight = "400px";
+        previewContainer.innerHTML = "";
+        previewContainer.appendChild(previewImage);
+      });
+    </script>
+  </body>
+
+  <a href="takeapicture/index.html">カメラアプリ</a>
+  <div>
+    <input type="file" id="fileInput" />
+    <div id="previewContainer"></div>
+  </div>
+
+  <canvas id="facemeshCanvas"></canvas>
 </html>
