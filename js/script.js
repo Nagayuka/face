@@ -116,5 +116,3 @@ async function predictWebcam() {
     window.requestAnimationFrame(predictWebcam);
   }
 }
-const blendShapesList = document.getElementById("blendShapesList");
-drawBlendShapes(blendShapesList, results.faceBlendshapes);

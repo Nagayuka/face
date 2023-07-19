@@ -1,18 +1,18 @@
 let face_results;
 
 function setup() {
-  let p5canvas = createCanvas((windowHeight / 16) * 9, windowHeight);
+  let p5canvas = createCanvas(windowWidth, 400);
   p5canvas.parent("#canvas");
 
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
   gotFaces = function (results) {
     face_results = results;
-    adjustCanvas();
+    // adjustCanvas();
 
     hr = results;
     if (hr) {
       console.log(hr);
-      console.log(hr.faceLandmarks);
+      // console.log(hr.faceLandmarks);
     }
   };
 }
@@ -38,9 +38,9 @@ function windowResized() {
   adjustCanvas();
 }
 
-function adjustCanvas() {
-  resizeCanvas((windowHeight / 16) * 9, windowHeight);
-}
+// function adjustCanvas() {
+//   resizeCanvas((windowHeight / 16) * 9, windowHeight);
+// }
 
 function Mask() {
   // 各頂点座標を表示する

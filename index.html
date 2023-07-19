@@ -4,44 +4,74 @@
     <meta charset="UTF-8" />
     <title>p5MediaPipeHands Face Landmarker</title>
     <style>
+      * {
+        box-sizing: border-box;
+        max-width: calc(100vh / 16 * 9);
+      }
+
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background: pink;
+      }
+
+      main {
+        width: calc(100vh / 16 * 9);
+        height: 100vh;
+        background-color: lightgray;
+      }
+
       .container {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(1, 1fr);
+        position: fixed;
       }
 
       video {
         -webkit-transform: scaleX(-1);
+        width: 100%;
+        height: auto;
       }
 
       #canvas {
         width: 100%;
-        height: 100%;
+        height: auto;
       }
 
       #webcam {
         width: 100%;
-        height: 50%;
       }
     </style>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
   </head>
 
   <body>
-    <h1>Face Landmarker</h1>
-    <p id="message"></p>
-    <div class="container">
-      <div>
-        <button id="webcamButton" disabled>ENABLE WEBCAM</button>
+    <main>
+      <h1>ものまね</h1>
+
+      <div class="container">
+        <p id="message"></p>
+        <div>
+          <button id="webcamButton" disabled>ENABLE WEBCAM</button>
+        </div>
+        <div style="position: relative">
+          <video
+            id="webcam"
+            style="position: absolute; left: 0px; top: 0px; width: 100%"
+            autoplay
+            playsinline
+          ></video>
+          <div
+            id="canvas"
+            style="position: absolute; left: 0px; top: 0px"
+          ></div>
+        </div>
       </div>
-      <div style="position: relative">
-        <video
-          id="webcam"
-          style="position: absolute; left: 0px; top: 0px"
-          autoplay
-          playsinline
-        ></video>
-        <div id="canvas" style="position: absolute; left: 0px; top: 50%"></div>
-      </div>
-    </div>
+    </main>
 
     <!-- include js libraries -->
     <script src="./js/p5.js"></script>
@@ -62,5 +92,6 @@
         previewContainer.appendChild(previewImage);
       });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
