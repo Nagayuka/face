@@ -30,28 +30,6 @@ function draw() {
   rect(0, 0, width, height);
 }
 
-// function windowResized() {
-//   adjustCanvas();
-// }
-
-function adjustCanvas() {
-  // カメラ映像のアスペクト比（1:1 正方形）に合わせてキャンバスのサイズを設定
-  const aspectRatio = 1;
-  let canvasWidth, canvasHeight;
-
-  if (windowWidth / windowHeight > aspectRatio) {
-    canvasWidth = windowHeight;
-    canvasHeight = windowHeight;
-  } else {
-    canvasWidth = windowWidth;
-    canvasHeight = windowWidth;
-  }
-
-  // キャンバスのサイズを設定
-  let p5canvas = createCanvas(canvasWidth, canvasHeight);
-  p5canvas.parent("#canvas");
-}
-
 function Mask() {
   // 各頂点座標を表示する
   // 各頂点座標の位置と番号の対応は以下のURLを確認
