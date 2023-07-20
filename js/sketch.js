@@ -1,13 +1,13 @@
 let face_results;
 
 function setup() {
-  let p5canvas = createCanvas(windowWidth, 400);
+  // adjustCanvas();
+  let p5canvas = createCanvas(windowWidth, 300);
   p5canvas.parent("#canvas");
 
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
   gotFaces = function (results) {
     face_results = results;
-    // adjustCanvas();
 
     hr = results;
     if (hr) {
@@ -16,8 +16,6 @@ function setup() {
     }
   };
 }
-
-let gameHeight = 400;
 
 function draw() {
   // 描画処理
@@ -30,17 +28,29 @@ function draw() {
   stroke(0);
   strokeWeight(2);
   rect(0, 0, width, height);
-  //fill(230, 240, 255);
-  rect(0, 0, width, gameHeight);
 }
 
-function windowResized() {
-  adjustCanvas();
-}
-
-// function adjustCanvas() {
-//   resizeCanvas((windowHeight / 16) * 9, windowHeight);
+// function windowResized() {
+//   adjustCanvas();
 // }
+
+function adjustCanvas() {
+  // カメラ映像のアスペクト比（1:1 正方形）に合わせてキャンバスのサイズを設定
+  const aspectRatio = 1;
+  let canvasWidth, canvasHeight;
+
+  if (windowWidth / windowHeight > aspectRatio) {
+    canvasWidth = windowHeight;
+    canvasHeight = windowHeight;
+  } else {
+    canvasWidth = windowWidth;
+    canvasHeight = windowWidth;
+  }
+
+  // キャンバスのサイズを設定
+  let p5canvas = createCanvas(canvasWidth, canvasHeight);
+  p5canvas.parent("#canvas");
+}
 
 function Mask() {
   // 各頂点座標を表示する
@@ -74,11 +84,11 @@ function Mask() {
         }
 
         noStroke();
-        circle(x * width, y * (height / 2), 10);
+        circle(x * width, y * height, 10);
         // 番号を表示
         fill(50);
         textAlign(CENTER, CENTER);
-        text(i, x * width, y * (height / 2));
+        text(i, x * width, y * height);
       }
     }
   }
