@@ -69,18 +69,17 @@
         <div>
           <button id="webcamButton" disabled>ENABLE WEBCAM</button>
         </div>
-        <div style="position: relative">
+        <div
+          id="canvas"
+          style="position: flex; left: 0px; top: 0px; aspect-ratio: 1 / 1"
+        ></div>
+        <div style="position: flex">
           <video
             id="webcam"
             style="position: flex; left: 0px; top: 0px; width: 100vb"
             autoplay
             playsinline
           ></video>
-          <!-- 新しく追加したキャンバス -->
-          <div
-            id="canvas"
-            style="position: absolute; left: 0px; top: 0px; aspect-ratio: 1 / 1"
-          ></div>
         </div>
       </div>
     </main>
