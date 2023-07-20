@@ -1,7 +1,7 @@
 let face_results;
 
 function setup() {
-  // adjustCanvas();
+  adjustCanvas();
   let p5canvas = createCanvas(windowWidth, windowHeight * 0.4);
   p5canvas.parent("#canvas");
 
@@ -63,11 +63,19 @@ function Mask() {
 
         noStroke();
         circle(x * width, y * height, 10);
-        // 番号を表示
-        fill(50);
-        textAlign(CENTER, CENTER);
-        text(i, x * width, y * height);
+        // // 番号を表示
+        // fill(50);
+        // textAlign(CENTER, CENTER);
+        // text(i, x * width, y * height);
       }
     }
   }
+}
+
+function windowResized() {
+  adjustCanvas();
+}
+
+function adjustCanvas() {
+  resizeCanvas(windowWidth, windowHeight * 0.4);
 }
