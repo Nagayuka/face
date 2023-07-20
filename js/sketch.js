@@ -2,7 +2,7 @@ let face_results;
 
 function setup() {
   // adjustCanvas();
-  let p5canvas = createCanvas(windowWidth, windowHeight / 2);
+  let p5canvas = createCanvas(windowWidth, windowHeight * 0.4);
   p5canvas.parent("#canvas");
 
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
