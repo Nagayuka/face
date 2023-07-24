@@ -58,15 +58,16 @@ function Mask() {
         }
         // その他の点を白で描画
         else {
-          fill(255);
+          fill(254, 220, 189);
         }
 
         noStroke();
-        circle(x * width, y * height, 10);
-        // // 番号を表示
-        // fill(50);
-        // textAlign(CENTER, CENTER);
-        // text(i, x * width, y * height);
+        circle(x * width - 200, y * height, 10);
+        circle(x * width + 200, y * height, 10);
+        // 番号を表示
+        fill(50);
+        textAlign(CENTER, CENTER);
+        text(i, x * width, y * height);
       }
     }
   }
