@@ -14,10 +14,10 @@ let face_results;
 let gameStarted = false;
 let eggs = [];
 let bombs = [];
-let score = 10;
+let score = 0;
 let fallingObjects = [
   2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 1, 1,
-  2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1,
+  2, 1, 2, 2, 1, 2, 2, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 2, 1, 1, 1,
 ];
 let index = 0;
 let objectTimer = 0;
@@ -103,6 +103,8 @@ function draw() {
   rect(0, 0, width, height);
 }
 
+let chickPositions = []; // ひよこの位置を格納する配列
+
 function displayTitle() {
   textSize(32);
   textAlign(CENTER);
@@ -112,10 +114,18 @@ function displayTitle() {
   text("Press 'start' to Start", width / 2, height / 2 + 20);
   text("Your score: " + score, width / 2, height / 2 + 60);
 
-  // スコアの数だけひよこの画像を表示
+  // ひよこの画像を初めて配置した位置に固定して表示
   for (let i = 0; i < score; i++) {
-    let x = width / 2 - chickImageSize * (score / 2) + i * chickImageSize;
-    let y = height / 2 + 60;
+    if (!chickPositions[i]) {
+      // 初めて配置するひよこの場合はランダムな位置を保存
+      let x = random(width * 0.1, width * 0.9); // 横方向の位置をランダムに決定
+      let y = random(height * 0.3, height * 0.7); // 縦方向の位置をランダムに決定
+      chickPositions[i] = createVector(x, y); // ひよこの位置をベクトルで保存
+    }
+
+    // 配置された位置にひよこ画像を表示
+    let x = chickPositions[i].x;
+    let y = chickPositions[i].y;
     image(
       chickImages[i % chickImages.length],
       x,
@@ -195,6 +205,12 @@ function Mask() {
               (height / 5) * 4
             );
             strokeWeight(1);
+
+            //ひよこを移動させる
+            for (let i = 0; i < score; i++) {
+              chickPositions[i].x += random(-10, 10);
+              chickPositions[i].y += random(-10, 10);
+            }
           }
         }
       }
@@ -333,7 +349,7 @@ class Bomb {
   }
 
   display() {
-    fill(0, 0, 200); //紺色
+    fill(0, 0, 230); //紺色
     ellipse(this.x, this.y, this.width, this.height);
   }
 
