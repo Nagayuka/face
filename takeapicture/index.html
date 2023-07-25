@@ -1,127 +1,232 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"
-      crossorigin="anonymous"
-    ></script>
+    <meta charset="UTF-8" />
+    <title>Egg and Bomb Game</title>
   </head>
-
   <body>
-    <div class="container">
-      <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
-      <video
-        class="input_video"
-        width="640"
-        height="360"
-        autoplay
-        muted
-      ></video>
-      <canvas class="output_canvas" width="640" height="360"></canvas>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script>
+      let character;
+      let objects = [];
+      let isMouthOpen = false;
+      let eggsCaught = 0;
+      let eggsAvoided = 30;
+      let bombsCaught = 0;
+      let bombsAvoided = 10;
+      let isGameOver = false;
+      let isGameStarted = false;
+      let score = 0; // スコア変数を定義します
+
+      class Character {
+        constructor() {
+          this.x = 50; // Fixed position on the left side
+          this.y = height / 2 - 10;
+          this.size = 40;
+        }
+
+        display() {
+          fill(255);
+          ellipse(this.x, this.y, this.size);
+          if (isMouthOpen) {
+            fill(0);
+            ellipse(this.x, this.y + 10, this.size / 2, this.size / 2);
+          }
+        }
+      }
+
+      class Egg {
+        constructor() {
+          this.x = width;
+          this.y = height / 2;
+          this.size = 20;
+          this.speed = 5;
+        }
+
+        display() {
+          fill(255, 255, 255);
+          ellipse(this.x, this.y, this.size);
+        }
+
+        move() {
+          this.x -= this.speed;
+        }
+
+        checkCollision() {
+          if (
+            isMouthOpen && // 口が開いている場合
+            this.x < character.x &&
+            this.y > height - character.size &&
+            this.x > character.x - character.size / 2
+          ) {
+            eggsCaught++; // プレイヤーが卵を食べた時に点数を増やす
+            eggsAvoided--; // 卵を食べたので避けた数を減らす
+            // 以下の行を追加して、スコアを増やします
+            score++;
+          } else if (
+            !isMouthOpen && // 口が閉じている場合
+            this.x < character.x &&
+            this.y > height - character.size &&
+            this.x > character.x - character.size / 2
+          ) {
+            eggsAvoided--; // プレイヤーが卵を食べ損ねたので避けた数を減らす
+          }
+        }
+      }
+
+      class Bomb {
+        constructor() {
+          this.x = width;
+          this.y = height / 2;
+          this.size = 20;
+          this.speed = 5;
+        }
+
+        display() {
+          fill(255, 0, 0);
+          ellipse(this.x, this.y, this.size);
+        }
+
+        move() {
+          this.x -= this.speed;
+        }
+
+        checkCollision() {
+          if (
+            isMouthOpen && // 口が開いている場合
+            this.x < character.x &&
+            this.y > height - character.size &&
+            this.x > character.x - character.size / 2
+          ) {
+            bombsCaught++; // プレイヤーが爆弾を食べた時に点数を増やす
+            bombsAvoided--; // 爆弾を食べたので避けた数を減らす
+          } else if (
+            !isMouthOpen && // 口が閉じている場合
+            this.x < character.x &&
+            this.y > height - character.size &&
+            this.x > character.x - character.size / 2
+          ) {
+            bombsAvoided--; // プレイヤーが爆弾を避け損ねたので避けた数を減らす
+          }
+        }
+      }
+
+      function setup() {
+        createCanvas(400, 400);
+        character = new Character();
+      }
+
+      function draw() {
+        if (!isGameStarted) {
+          showTitleScreen();
+        } else {
+          if (!isGameOver) {
+            background(0);
+
+            if (keyIsDown(65)) {
+              // 'A' key
+              isMouthOpen = true;
+            } else {
+              isMouthOpen = false;
+            }
+
+            character.display();
+
+            if (frameCount % 30 === 0) {
+              // Every 0.5 seconds
+              if (objects.length < 40) {
+                if (random() < 0.75 && eggsAvoided > 0) {
+                  objects.push(new Egg());
+                } else if (bombsAvoided > 0) {
+                  objects.push(new Bomb());
+                }
+              }
+            }
+
+            for (let object of objects) {
+              object.move();
+              object.display();
+              object.checkCollision();
+              if (object.x < -object.size) {
+                if (object instanceof Egg) {
+                  eggsAvoided--; // 卵が画面外に出たので避けた数を減らす
+                } else if (object instanceof Bomb) {
+                  bombsAvoided--; // 爆弾が画面外に出たので避けた数を減らす
+                }
+                objects.splice(objects.indexOf(object), 1);
+              }
+            }
+
+            if (objects.length === 40) {
+              isGameOver = true;
+            }
+
+            // スコアの表示を更新
+            displayScore();
+          } else {
+            showGameOverScreen();
+          }
+        }
+      }
+
+      function showTitleScreen() {
+        background(0);
+        textAlign(CENTER);
+        fill(255);
+        textSize(32);
+        text("Egg and Bomb Game", width / 2, height / 2 - 30);
+        textSize(18);
+        text("Press 's' key to start", width / 2, height / 2 + 10);
+      }
+
+      function showGameOverScreen() {
+        background(0);
+        textAlign(CENTER);
+        textSize(32);
+        fill(255);
+        if (objects.length === 0) {
+          text("Game Cleared!", width / 2, height / 2);
+        } else {
+          text("Game Over", width / 2, height / 2);
+        }
+        text("Eggs Caught: " + eggsCaught, 20, 30);
+        text("Eggs Avoided: " + eggsAvoided, 20, 50);
+        text("Bombs Caught: " + bombsCaught, 20, 70);
+        text("Bombs Avoided: " + bombsAvoided, 20, 90);
+        textSize(18);
+        text("Press 's' key to go back to title", width / 2, height / 2 + 120);
+      }
+
+      function keyPressed() {
+        if (!isGameStarted && key === "s") {
+          isGameStarted = true;
+        }
+        if (isGameOver && key === "s") {
+          resetGame();
+        }
+      }
+
+      function resetGame() {
+        objects = [];
+        eggsCaught = 0;
+        eggsAvoided = 30;
+        bombsCaught = 0;
+        bombsAvoided = 10;
+        isGameOver = false;
+        isGameStarted = false;
+      }
+
+      function displayScore() {
+        textAlign(RIGHT, TOP);
+        fill(255);
+        textSize(20);
+        text("Eggs Caught: " + eggsCaught, width - 10, 10);
+        text("Eggs Avoided: " + eggsAvoided, width - 10, 30);
+        text("Bombs Caught: " + bombsCaught, width - 10, 50);
+        text("Bombs Avoided: " + bombsAvoided, width - 10, 70);
+        // スコアを表示します
+        text("Score: " + score, width - 10, 90);
+      }
+    </script>
   </body>
 </html>
-
-<script type="module">
-  const videoElement = document.getElementsByClassName("input_video")[0];
-  const canvasElement = document.getElementsByClassName("output_canvas")[0];
-  const canvasCtx = canvasElement.getContext("2d");
-
-  let previousFrame = null;
-
-  function onResults(results) {
-    previousFrame = results.image;
-
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(
-      results.image,
-      0,
-      0,
-      canvasElement.width,
-      canvasElement.height
-    );
-    if (results.multiFaceLandmarks) {
-      for (const landmarks of results.multiFaceLandmarks) {
-        drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION, {
-          color: "#C0C0C070",
-          lineWidth: 1,
-        });
-        drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, {
-          color: "#FF3030",
-        });
-        drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW, {
-          color: "#FF3030",
-        });
-        drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYE, {
-          color: "#30FF30",
-        });
-        drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW, {
-          color: "#30FF30",
-        });
-        drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, {
-          color: "#E0E0E0",
-        });
-        drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, {
-          color: "#E0E0E0",
-        });
-      }
-    }
-    canvasCtx.restore();
-  }
-
-  function renderFrame() {
-    if (previousFrame) {
-      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-      canvasCtx.drawImage(
-        previousFrame,
-        0,
-        0,
-        canvasElement.width,
-        canvasElement.height
-      );
-
-      // 1秒後に再度描画
-      setTimeout(renderFrame, 1000);
-    } else {
-      // 1秒遅れの映像がまだない場合は待機
-      requestAnimationFrame(renderFrame);
-    }
-  }
-
-  renderFrame();
-
-  const faceMesh = new FaceMesh({
-    locateFile: (file) => {
-      return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-    },
-  });
-  faceMesh.setOptions({
-    maxNumFaces: 1,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5,
-  });
-  faceMesh.onResults(onResults);
-
-  const camera = new Camera(videoElement, {
-    onFrame: async () => {
-      await faceMesh.send({ image: videoElement });
-    },
-    width: 640,
-    height: 360,
-  });
-  camera.start();
-</script>
