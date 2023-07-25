@@ -30,6 +30,7 @@ function draw() {
   clear(); // これを入れないと下レイヤーにあるビデオが見えなくなる
   // マスクを描画
   Mask();
+  Game();
 
   // キャンバスに枠をつける
   noFill();
@@ -67,4 +68,8 @@ function windowResized() {
 
 function adjustCanvas() {
   resizeCanvas(windowWidth, windowHeight * 0.4);
+}
+
+function Game() {
+  ellipse(10, 10, 10, 10);
 }
