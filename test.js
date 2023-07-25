@@ -141,7 +141,7 @@ async function handleClick(event) {
       { color: "#30FF30" }
     );
   }
-  drawBlendShapes(imageBlendShapes, faceLandmarkerResult.faceBlendshapes);
+  
 }
 
 /********************************************************************

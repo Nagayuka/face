@@ -6,13 +6,21 @@ function setup() {
   p5canvas.parent("#canvas");
 
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
+
   gotFaces = function (results) {
     face_results = results;
 
     hr = results;
     if (hr) {
-      console.log(hr);
-      // console.log(hr.faceLandmarks);
+      console.log(hr.faceBlendshapes[0].categories[25].score);
+
+      // 追加: scoreが条件を満たしているかチェック
+      if (hr.faceBlendshapes[0].categories[25].score > 0.5) {
+        redCircleDisplayed = true; // 赤い丸を表示するフラグを立てる
+        console.log("Open");
+      } else {
+        redCircleDisplayed = false; // 条件を満たさない場合はフラグを下げる
+      }
     }
   };
 }
@@ -40,33 +48,13 @@ function Mask() {
         const landmark = landmarks[i];
         const { x, y } = landmark;
 
-        // 目の周りの点を黒で描画
-        if (i >= 68 && i <= 187) {
-          fill(0);
-        }
-        //眉毛の点を茶色で描画
-        else if (i >= 198 && i <= 393) {
-          fill(230, 200, 200);
-        }
-        // 鼻の周りの点をオレンジで描画
-        else if (i >= 188 && i <= 197) {
-          fill(255, 165, 0);
-        }
-        // 口の周りの点を赤で描画
-        else if (i >= 398 && i <= 467) {
-          fill(255, 0, 0);
-        }
-        // その他の点を白で描画
-        else {
-          fill(254, 220, 189);
-        }
-
         noStroke();
-        circle(x * width - 200, y * height, 10);
-        circle(x * width + 200, y * height, 10);
+        fill(255, 192, 203);
+        circle(x * width, y * height, 10);
         // 番号を表示
         fill(50);
         textAlign(CENTER, CENTER);
+
         text(i, x * width, y * height);
       }
     }

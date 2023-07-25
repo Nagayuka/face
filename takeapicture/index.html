@@ -1,122 +1,127 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>カメラアプリ</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-    />
+    <meta charset="utf-8" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/face_mesh.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
+
   <body>
     <div class="container">
-      <h1 class="mt-4 mb-4">カメラアプリ</h1>
-      <div class="row">
-        <div class="col-12 col-md-6">
-          <video id="video" width="100%" height="auto" autoplay></video>
-          <br />
-          <button id="captureButton" class="btn btn-primary mt-2">
-            写真を撮影
-          </button>
-        </div>
-        <div class="col-12 col-md-6">
-          <canvas
-            id="canvas"
-            style="max-width: 100%; max-height: 400px"
-          ></canvas>
-          <br />
-          <a
-            id="downloadLink"
-            class="btn btn-success mt-2"
-            download="photo.jpg"
-            href="#"
-            style="display: none"
-            >写真を保存</a
-          >
-          <br />
-          <input type="file" id="loadFileInput" class="mt-2" />
-          <button id="loadButton" class="btn btn-info mt-2">
-            写真を読み込む
-          </button>
-        </div>
-      </div>
+      <ul class="blend-shapes-list" id="video-blend-shapes"></ul>
+      <video
+        class="input_video"
+        width="640"
+        height="360"
+        autoplay
+        muted
+      ></video>
+      <canvas class="output_canvas" width="640" height="360"></canvas>
     </div>
-
-    <script>
-      // カメラストリームを取得する
-      navigator.mediaDevices
-        .getUserMedia({ video: true })
-        .then(function (stream) {
-          var videoElement = document.getElementById("video");
-          videoElement.srcObject = stream;
-
-          // カメラの解像度を取得して、Canvasのサイズを設定する
-          var track = stream.getVideoTracks()[0];
-          var settings = track.getSettings();
-          var canvasElement = document.getElementById("canvas");
-          canvasElement.width = settings.width;
-          canvasElement.height = settings.height;
-        })
-        .catch(function (error) {
-          console.error("カメラストリームを取得できませんでした: ", error);
-        });
-
-      // 写真を撮影する
-      var captureButton = document.getElementById("captureButton");
-      captureButton.addEventListener("click", function () {
-        var videoElement = document.getElementById("video");
-        var canvasElement = document.getElementById("canvas");
-        var downloadLink = document.getElementById("downloadLink");
-
-        // Canvasに映像を描画
-        canvasElement
-          .getContext("2d")
-          .drawImage(
-            videoElement,
-            0,
-            0,
-            canvasElement.width,
-            canvasElement.height
-          );
-
-        // 画像をDataURLに変換してダウンロードリンクに設定
-        var dataURL = canvasElement.toDataURL("image/jpeg");
-        downloadLink.href = dataURL;
-
-        // ダウンロードリンクを表示
-        downloadLink.style.display = "block";
-      });
-
-      // 写真を読み込む
-      var loadButton = document.getElementById("loadButton");
-      loadButton.addEventListener("click", function () {
-        var loadFileInput = document.getElementById("loadFileInput");
-        if (loadFileInput.files && loadFileInput.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
-            var img = new Image();
-            img.onload = function () {
-              var canvasElement = document.getElementById("canvas");
-              var context = canvasElement.getContext("2d");
-              context.clearRect(
-                0,
-                0,
-                canvasElement.width,
-                canvasElement.height
-              );
-              context.drawImage(
-                img,
-                0,
-                0,
-                canvasElement.width,
-                canvasElement.height
-              );
-            };
-            img.src = e.target.result;
-          };
-          reader.readAsDataURL(loadFileInput.files[0]);
-        }
-      });
-    </script>
   </body>
 </html>
+
+<script type="module">
+  const videoElement = document.getElementsByClassName("input_video")[0];
+  const canvasElement = document.getElementsByClassName("output_canvas")[0];
+  const canvasCtx = canvasElement.getContext("2d");
+
+  let previousFrame = null;
+
+  function onResults(results) {
+    previousFrame = results.image;
+
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    canvasCtx.drawImage(
+      results.image,
+      0,
+      0,
+      canvasElement.width,
+      canvasElement.height
+    );
+    if (results.multiFaceLandmarks) {
+      for (const landmarks of results.multiFaceLandmarks) {
+        drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION, {
+          color: "#C0C0C070",
+          lineWidth: 1,
+        });
+        drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, {
+          color: "#FF3030",
+        });
+        drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW, {
+          color: "#FF3030",
+        });
+        drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYE, {
+          color: "#30FF30",
+        });
+        drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW, {
+          color: "#30FF30",
+        });
+        drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, {
+          color: "#E0E0E0",
+        });
+        drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, {
+          color: "#E0E0E0",
+        });
+      }
+    }
+    canvasCtx.restore();
+  }
+
+  function renderFrame() {
+    if (previousFrame) {
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      canvasCtx.drawImage(
+        previousFrame,
+        0,
+        0,
+        canvasElement.width,
+        canvasElement.height
+      );
+
+      // 1秒後に再度描画
+      setTimeout(renderFrame, 1000);
+    } else {
+      // 1秒遅れの映像がまだない場合は待機
+      requestAnimationFrame(renderFrame);
+    }
+  }
+
+  renderFrame();
+
+  const faceMesh = new FaceMesh({
+    locateFile: (file) => {
+      return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+    },
+  });
+  faceMesh.setOptions({
+    maxNumFaces: 1,
+    minDetectionConfidence: 0.5,
+    minTrackingConfidence: 0.5,
+  });
+  faceMesh.onResults(onResults);
+
+  const camera = new Camera(videoElement, {
+    onFrame: async () => {
+      await faceMesh.send({ image: videoElement });
+    },
+    width: 640,
+    height: 360,
+  });
+  camera.start();
+</script>
