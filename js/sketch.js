@@ -25,36 +25,13 @@ function setup() {
   };
 }
 
-// 追加: ゲーム用の変数
-let eggsAndBombs = [
-  2, 1, 2, 2, 1, 2, 1, 2, 2, 2, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 2, 1, 2, 2, 1, 1,
-  2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 1, 1, 1,
-];
-let eggIndex = 0; // 現在表示されている卵または爆弾のインデックス
-let eggSpeed = 3; // 卵と爆弾の移動速度
-let eggSize = 20; // 卵と爆弾のサイズ
-let eggY = 0; // 卵と爆弾のY座標
-
 function draw() {
-  clear();
+  // 描画処理
+  clear(); // これを入れないと下レイヤーにあるビデオが見えなくなる
+  // マスクを描画
   Mask();
 
-  // 追加: 卵と爆弾を描画する
-  if (redCircleDisplayed && eggIndex < eggsAndBombs.length) {
-    const eggOrBomb = eggsAndBombs[eggIndex];
-    let eggOrBombColor = color(255, 255, 0); // 卵は黄色
-    if (eggOrBomb === 2) {
-      eggOrBombColor = color(255, 0, 0); // 爆弾は赤色
-    }
-    fill(eggOrBombColor);
-    ellipse(width, eggY, eggSize, eggSize);
-    eggY += eggSpeed;
-    if (eggY > height) {
-      eggY = 0;
-      eggIndex++;
-    }
-  }
-
+  // キャンバスに枠をつける
   noFill();
   stroke(0);
   strokeWeight(2);
