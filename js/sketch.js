@@ -5,7 +5,8 @@ let chickImageSize = 100; // ひよこの画像のサイズ
 function preload() {
   // ひよこ画像を読み込む
   for (let i = 1; i <= 5; i++) {
-    let chickImage = loadImage(`hiyokara.png`);
+    let chickImage = loadImage(`face/hiyokara.png`);
+
     chickImages.push(chickImage);
   }
 }
