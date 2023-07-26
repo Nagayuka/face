@@ -4,7 +4,7 @@ let chickImageSize = 100; // ひよこの画像のサイズ
 
 function preload() {
   // GitHub Pagesでの画像パス
-  let imagePath = "face/hiyokara.png";
+  let imagePath = "js/hiyokara.png";
 
   // ローカル環境での画像パス
   if (
