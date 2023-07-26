@@ -3,10 +3,20 @@ let chickImages = [];
 let chickImageSize = 100; // ひよこの画像のサイズ
 
 function preload() {
+  // GitHub Pagesでの画像パス
+  let imagePath = "face/hiyokara.png";
+
+  // ローカル環境での画像パス
+  if (
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1"
+  ) {
+    imagePath = "hiyokara.png";
+  }
+
   // ひよこ画像を読み込む
   for (let i = 1; i <= 5; i++) {
-    let chickImage = loadImage(`face/hiyokara.png`);
-
+    let chickImage = loadImage(imagePath);
     chickImages.push(chickImage);
   }
 }
