@@ -326,7 +326,7 @@ class Egg {
   constructor() {
     this.x = random(300, width - 300);
     this.y = -100; // 画面外から降ってくるように高さを変更
-    this.speed = 5; // 速度を遅くする
+    this.speed = 8; // 速度を遅くする
     this.width = 50;
     this.height = 70;
   }
@@ -350,7 +350,7 @@ class Bomb {
   constructor() {
     this.x = random(300, width - 300);
     this.y = -100; // 画面外から降ってくるように高さを変更
-    this.speed = 5; // 速度を遅くする
+    this.speed = 8; // 速度を遅くする
     this.width = 50;
     this.height = 50;
   }

@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
     <title>p5MediaPipeHands Face Landmarker</title>
     <link
@@ -11,6 +17,7 @@
       * {
         box-sizing: border-box;
         max-width: calc(100vh / 16 * 9);
+        font-family: "Cherry Bomb One", cursive;
       }
 
       body {
@@ -68,7 +75,7 @@
         <p id="message"></p>
         <div>
           <button id="webcamButton" disabled>ENABLE WEBCAM</button>
-          <button id="gameBtn" onclick="startGame()">start</button>
+          <button id="gameBtn" onclick="startGame()">Start</button>
           <button onclick="restartGame()">Restart</button>
         </div>
         <div id="canvas" style="position: flex; left: 0px; top: 0px"></div>
