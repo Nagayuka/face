@@ -67,6 +67,27 @@
 
       h1 {
         font-family: "Cherry Bomb One", cursive;
+        font-size: 5rem;
+      }
+
+      #message {
+        font-size: 2rem;
+      }
+
+      #gameBtn {
+        font-size: 2rem;
+      }
+
+      #webcamButton {
+        font-size: 2rem;
+      }
+
+      #restart {
+        font-size: 2rem;
+      }
+
+      a {
+        font-size: 2rem;
       }
     </style>
   </head>
@@ -80,9 +101,9 @@
       <div class="container">
         <p id="message"></p>
         <div>
-          <button id="webcamButton" disabled>ENABLE WEBCAM</button>
-          <button id="gameBtn" onclick="startGame()">Start</button>
-          <button onclick="restartGame()">Restart</button>
+          <button id="webcamButton" disabled>1.ENABLE WEBCAM</button>
+          <button id="gameBtn" onclick="startGame()">2.Start</button>
+          <button id="restart" onclick="restartGame()">Restart</button>
         </div>
         <div id="canvas" style="position: flex; left: 0px; top: 0px"></div>
         <div style="position: flex">

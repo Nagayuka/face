@@ -41,6 +41,7 @@ function setup() {
   adjustCanvas();
   let p5canvas = createCanvas(windowWidth, windowHeight * 0.4);
   p5canvas.parent("#canvas");
+  background(0, 191, 255); // 水色の背景を設定
 
   // 顔が見つかると以下の関数が呼び出される．resultsに検出結果が入っている．
 
