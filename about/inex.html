@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>about</title>
+    <style>
+      /* ここにスタイルを追加してください */
+      body {
+        font-family: Arial, sans-serif;
+        padding: 10px;
+      }
+
+      h1 {
+        text-align: center;
+        color: black;
+      }
+
+      p {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="../index.html"><h1>たまごぱくぱく🥚</h1></a>
+
+    <h2>遊び方</h2>
+    <p>
+      カメラをオンにして、スタートボタンを押すとゲームが始まります。<br />
+      口と目が自分の顔に反映して動きます。キャラクターの位置は顔の左右の位置で決まります。<br />
+      たまごが飛んでくるので、口を開けてたまごを食べましょう。<br />
+      間違ってを食べると、ゲームオーバーです。<br />
+      画面から顔が外れてしまうとエラーが起きてしまうので、顔が画面から外れないようにしてください。<br />
+    </p>
+
+    <h2>概要</h2>
+    <p>
+      MediaPipeのFace landmark detectionを使っています。<br />
+      キャラクターの位置は、ランドマークの上の唇の点の13番の位置が反映されています。<br />
+      faceBlendshapesの値から、口や目を閉じたかを判別しています。<br />
+    </p>
+    <a href="../index.html">ゲーム画面に戻る</a>
+
+    <footer>
+      <p>Created by YukaNagakubo. TMU Interaction desing 2023.</p>
+    </footer>
+  </body>
+</html>

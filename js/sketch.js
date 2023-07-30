@@ -49,30 +49,30 @@ function setup() {
 
     hr = results;
     if (hr) {
-      console.log(
-        hr.faceBlendshapes[0].categories[25].score,
-        hr.faceBlendshapes[0].categories[9].score,
-        hr.faceBlendshapes[0].categories[10].score
-      );
+      // console.log(
+      //   hr.faceBlendshapes[0].categories[25].score,
+      //   hr.faceBlendshapes[0].categories[9].score,
+      //   hr.faceBlendshapes[0].categories[10].score
+      // );
 
       // 追加: scoreが条件を満たしているかチェック
       if (hr.faceBlendshapes[0].categories[25].score > 0.5) {
         redCircleDisplayed = true; // 赤い丸を表示するフラグを立てる
-        console.log("Open");
+        // console.log("Open");
       } else {
         redCircleDisplayed = false; // 条件を満たさない場合はフラグを下げる
       }
 
       if (hr.faceBlendshapes[0].categories[9].score < 0.5) {
         LeftEyeClosed = true;
-        console.log("Left");
+        // console.log("Left");
       } else {
         LeftEyeClosed = false;
       }
 
       if (hr.faceBlendshapes[0].categories[10].score < 0.5) {
         RightEyeClosed = true;
-        console.log("Right");
+        // console.log("Right");
       } else {
         RightEyeClosed = false;
       }
@@ -160,15 +160,6 @@ function Mask() {
       for (let i = 0; i < landmarks.length; i++) {
         const landmark = landmarks[i];
         const { x, y } = landmark;
-
-        // noStroke();
-        // fill(255, 192, 203);
-        // circle(x * width, y * height, 10);
-        // // 番号を表示
-        // textSize(5);
-        // fill(50);
-        // textAlign(CENTER, CENTER);
-        // text(i, x * width, y * height);
 
         // 追加: 13番目の位置に丸を描画
         if (i === 13) {
