@@ -120,10 +120,15 @@ function displayTitle() {
   textSize(32);
   textAlign(CENTER);
   fill(0);
-  text("Face Detection Game", width / 2, height / 2 - 50);
-  textSize(24);
-  text("Press 'start' to Start", width / 2, height / 2 + 20);
-  text("Your score: " + score, width / 2, height / 2 + 60);
+  text("卵🥚を食べよう！爆弾🔵は食べないで！", width / 2, height / 2 - 50);
+  textSize(22);
+  text("カメラをつけてから、スタートを押してください。", width / 2, height / 2);
+  text(
+    "カメラから顔が外れないようにしてください。",
+    width / 2,
+    height / 2 + 30
+  );
+  text("Your score: " + score, width / 2, height / 2 + 70);
 
   // ひよこの画像を初めて配置した位置に固定して表示
   for (let i = 0; i < score; i++) {
@@ -144,6 +149,24 @@ function displayTitle() {
       chickImageSize,
       chickImageSize
     );
+  }
+
+  if (face_results) {
+    for (let landmarks of face_results.faceLandmarks) {
+      for (let i = 0; i < landmarks.length; i++) {
+        const landmark = landmarks[i];
+
+        if (RightEyeClosed) {
+          fill(0);
+        } else {
+          //ひよこを移動させる
+          for (let i = 0; i < score; i++) {
+            chickPositions[i].x += random(-1, 1);
+            chickPositions[i].y += random(-1, 1);
+          }
+        }
+      }
+    }
   }
 }
 
@@ -208,11 +231,13 @@ function Mask() {
             );
             strokeWeight(1);
 
-            //ひよこを移動させる
-            for (let i = 0; i < score; i++) {
-              chickPositions[i].x += random(-10, 10);
-              chickPositions[i].y += random(-10, 10);
-            }
+            // if ((gameStarted = false)) {
+            //   //ひよこを移動させる
+            //   for (let i = 0; i < score; i++) {
+            //     chickPositions[i].x += random(-10, 10);
+            //     chickPositions[i].y += random(-10, 10);
+            //   }
+            // }
           }
         }
       }
@@ -287,15 +312,17 @@ function updateObjects() {
   }
 
   // オブジェクトの移動
+  const secondsElapsed = deltaTime / 1000; // 前フレームからの経過時間を秒単位に変換
+
   for (let i = eggs.length - 1; i >= 0; i--) {
-    eggs[i].update();
+    eggs[i].update(secondsElapsed); // 経過時間を渡してオブジェクトを更新
     if (eggs[i].isOutOfScreen()) {
       eggs.splice(i, 1); // 画面外に出た卵を削除
     }
   }
 
   for (let i = bombs.length - 1; i >= 0; i--) {
-    bombs[i].update();
+    bombs[i].update(secondsElapsed); // 経過時間を渡してオブジェクトを更新
     if (bombs[i].isOutOfScreen()) {
       bombs.splice(i, 1); // 画面外に出た爆弾を削除
     }
@@ -317,13 +344,13 @@ class Egg {
   constructor() {
     this.x = random(300, width - 300);
     this.y = -100; // 画面外から降ってくるように高さを変更
-    this.speed = 8; // 速度を遅くする
-    this.width = 50;
-    this.height = 70;
+    this.speed = 500; // 1秒あたりの移動距離（ピクセル）
+    this.width = 80;
+    this.height = 100;
   }
 
-  update() {
-    this.y += this.speed;
+  update(secondsElapsed) {
+    this.y += this.speed * secondsElapsed; // 経過時間を考慮した速度で更新
   }
 
   display() {
@@ -337,17 +364,18 @@ class Egg {
 }
 
 // 爆弾のクラス
+
 class Bomb {
   constructor() {
     this.x = random(300, width - 300);
     this.y = -100; // 画面外から降ってくるように高さを変更
-    this.speed = 8; // 速度を遅くする
-    this.width = 50;
-    this.height = 50;
+    this.speed = 500; // 1秒あたりの移動距離（ピクセル）
+    this.width = 80;
+    this.height = 80;
   }
 
-  update() {
-    this.y += this.speed;
+  update(secondsElapsed) {
+    this.y += this.speed * secondsElapsed; // 経過時間を考慮した速度で更新
   }
 
   display() {
