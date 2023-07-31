@@ -62,10 +62,10 @@ function enableCam(event) {
   }
   if (webcamRunning === true) {
     webcamRunning = false;
-    enableWebcamButton.innerText = "ENABLE PREDICTIONS";
+    enableWebcamButton.innerText = "カメラON";
   } else {
     webcamRunning = true;
-    enableWebcamButton.innerText = "DISABLE PREDICTIONS";
+    enableWebcamButton.innerText = "カメラOFF";
   }
   // getUsermedia parameters.
   const constraints = {

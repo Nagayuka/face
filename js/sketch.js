@@ -32,7 +32,7 @@ let fallingObjects = [
 ];
 let index = 0;
 let objectTimer = 0;
-let objectInterval = 18; // 1秒ごとにオブジェクトを生成
+let objectInterval = 13; // 1秒ごとにオブジェクトを生成
 
 let gameTimer = 0; // ゲームの経過時間
 const gameDuration = 30; // ゲームの制限時間（秒）
@@ -118,18 +118,23 @@ function draw() {
 let chickPositions = []; // ひよこの位置を格納する配列
 
 function displayTitle() {
-  textSize(32);
+  textSize(50);
   textAlign(CENTER);
   fill(0);
   text("卵🥚を食べよう！爆弾🔵は食べないで！", width / 2, height / 2 - 50);
-  textSize(22);
-  text("カメラをつけてから、スタートを押してください。", width / 2, height / 2);
+  textSize(30);
   text(
-    "カメラから顔が外れないようにしてください。",
+    "①カメラON ②スタート の順に押してください。",
     width / 2,
-    height / 2 + 30
+    height / 2 + 50
   );
-  text("Your score: " + score, width / 2, height / 2 + 70);
+  text(
+    "※カメラから顔が外れないようにしてください。",
+    width / 2,
+    height / 2 + 100
+  );
+  textSize(40);
+  text("孵化させたたまごの数: " + score, width / 2, 70);
 
   // ひよこの画像を初めて配置した位置に固定して表示
   for (let i = 0; i < score; i++) {
