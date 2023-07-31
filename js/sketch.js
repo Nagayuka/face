@@ -1,10 +1,20 @@
 // ひよこ画像の配列
 let chickImages = [];
 let chickImageSize = 100; // ひよこの画像のサイズ
+let mouthOpenSound;
+let gameBgm;
+let titleBgm;
+let tamago;
+let bakudan;
 
 function preload() {
   // GitHub Pagesでの画像パス
   let imagePath = "js/hiyokara.png";
+  mouthOpenSound = loadSound("../assets/Motion-Eating02-2.mp3");
+  gameBgm = loadSound("../assets/gamebgm.wav");
+  titleBgm = loadSound("../assets/titlebgm.wav");
+  tamago = loadSound("../assets/Onoma-Surprise04-5(Up).mp3");
+  bakudan = loadSound("../assets/爆発2.mp3");
 
   // ローカル環境での画像パス
   if (
@@ -12,6 +22,7 @@ function preload() {
     window.location.hostname === "127.0.0.1"
   ) {
     imagePath = "hiyokara.png";
+    mouthOpenSound = loadSound("assets/Motion-Eating02-2.mp3");
   }
 
   // ひよこ画像を読み込む
@@ -38,6 +49,9 @@ let gameTimer = 0; // ゲームの経過時間
 const gameDuration = 30; // ゲームの制限時間（秒）
 
 function setup() {
+  gameBgm.setVolume(0.3);
+  titleBgm.setVolume(0.3);
+
   adjustCanvas();
   let p5canvas = createCanvas(windowWidth, windowHeight * 0.4);
   p5canvas.parent("#canvas");
@@ -60,6 +74,9 @@ function setup() {
       if (hr.faceBlendshapes[0].categories[25].score > 0.5) {
         redCircleDisplayed = true; // 赤い丸を表示するフラグを立てる
         // console.log("Open");
+        if (!mouthOpenSound.isPlaying()) {
+          mouthOpenSound.play();
+        }
       } else {
         redCircleDisplayed = false; // 条件を満たさない場合はフラグを下げる
       }
@@ -118,6 +135,9 @@ function draw() {
 let chickPositions = []; // ひよこの位置を格納する配列
 
 function displayTitle() {
+  if (!titleBgm.isPlaying()) {
+    titleBgm.play();
+  }
   textSize(50);
   textAlign(CENTER);
   fill(0);
@@ -179,6 +199,13 @@ function displayTitle() {
 function startGame() {
   // ゲームボタンが押されたらゲームを開始する
   gameStarted = true;
+
+  //titleBGMを止める
+  titleBgm.stop();
+
+  if (!gameBgm.isPlaying()) {
+    gameBgm.play();
+  }
 }
 function Mask() {
   // 各頂点座標を表示する
@@ -265,6 +292,7 @@ function Game() {
   // 制限時間を超えた場合はゲームクリア画面を表示
   if (gameTimer >= gameDuration) {
     gameStarted = false; // ゲームを終了
+    gameBgm.stop(); // ゲームBGMを停止
     displayGameClear(); // ゲームクリア画面を表示
     return; // ゲームが終了したので、それ以降の処理をスキップする
   }
@@ -283,6 +311,9 @@ function updateObjects() {
         // 卵が口にぶつかった場合、スコアを加算して卵を削除
         score++;
         eggs.splice(i, 1);
+        if (!tamago.isPlaying()) {
+          tamago.play();
+        }
       }
     }
 
@@ -293,7 +324,12 @@ function updateObjects() {
       const mouthY = (height / 5) * 4 * 1.05;
       if (dist(bomb.x, bomb.y, mouthX, mouthY) < bomb.width / 2 + 60 / 2) {
         // 爆弾が口にぶつかった場合、ゲームを終了してゲームクリア画面を表示
+        if (!bakudan.isPlaying()) {
+          bakudan.play();
+        }
         gameStarted = false;
+
+        gameBgm.stop();
         displayGameClear();
         return;
       }
