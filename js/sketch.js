@@ -153,7 +153,16 @@ function displayTitle() {
     width / 2,
     height / 2 + 50
   );
-  text("※音が流れます。", width / 2, height / 2 + 100);
+  text(
+    "※音が流れます。カメラがつかない場合はしばらく待ってください。",
+    width / 2,
+    height / 2 + 100
+  );
+  text(
+    "※2回目以降はやり直すボタンでゲームスタート！",
+    width / 2,
+    height / 2 + 150
+  );
   textSize(40);
   text("孵化させたたまごの数: " + score, width / 2, 70);
 
