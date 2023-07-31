@@ -10,11 +10,11 @@ let bakudan;
 function preload() {
   // GitHub Pagesでの画像パス
   let imagePath = "js/hiyokara.png";
-  mouthOpenSound = loadSound("../assets/Motion-Eating02-2.mp3");
-  gameBgm = loadSound("../assets/gamebgm.wav");
-  titleBgm = loadSound("../assets/titlebgm.wav");
-  tamago = loadSound("../assets/Onoma-Surprise04-5(Up).mp3");
-  bakudan = loadSound("../assets/爆発2.mp3");
+  mouthOpenSound = loadSound("assets/Motion-Eating02-2.mp3");
+  gameBgm = loadSound("assets/gamebgm.wav");
+  titleBgm = loadSound("assets/titlebgm.wav");
+  tamago = loadSound("assets/Onoma-Surprise04-5(Up).mp3");
+  bakudan = loadSound("assets/爆発2.mp3");
 
   // ローカル環境での画像パス
   if (
@@ -22,7 +22,12 @@ function preload() {
     window.location.hostname === "127.0.0.1"
   ) {
     imagePath = "hiyokara.png";
-    mouthOpenSound = loadSound("assets/Motion-Eating02-2.mp3");
+    mouthOpenSound = loadSound("../assets/Motion-Eating02-2.mp3");
+    mouthOpenSound = loadSound("../assets/Motion-Eating02-2.mp3");
+    gameBgm = loadSound("../assets/gamebgm.wav");
+    titleBgm = loadSound("../assets/titlebgm.wav");
+    tamago = loadSound("../assets/Onoma-Surprise04-5(Up).mp3");
+    bakudan = loadSound("../assets/爆発2.mp3");
   }
 
   // ひよこ画像を読み込む
@@ -148,11 +153,7 @@ function displayTitle() {
     width / 2,
     height / 2 + 50
   );
-  text(
-    "※カメラから顔が外れないようにしてください。",
-    width / 2,
-    height / 2 + 100
-  );
+  text("※音が流れます。", width / 2, height / 2 + 100);
   textSize(40);
   text("孵化させたたまごの数: " + score, width / 2, 70);
 
